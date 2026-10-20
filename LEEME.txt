@@ -1,0 +1,20 @@
+GANAPLAY — PRIMERA VERSIÓN FUNCIONAL
+
+Incluye:
+- Trivia de cinco preguntas, puntos y resultados.
+- Juego de adivinar un número.
+- Reto de reflejos de 10 segundos.
+- Progreso local: puntos, partidas y mejor trivia.
+- Diseño adaptable a móviles.
+- Manifest y service worker para una PWA inicial.
+
+PRUEBA:
+Abre index.html en un navegador. Para instalar como PWA, los archivos deben estar alojados en un servicio HTTPS. Puedes subirlos a GitHub Pages o Netlify desde sus sitios oficiales, sujeto a sus condiciones.
+
+LÍMITES IMPORTANTES:
+- Esto es un prototipo web, no una aplicación nativa publicada en App Store o Google Play.
+- El espacio publicitario es una muestra; no se conecta a una red publicitaria ni genera ingresos.
+- Aún no hay enlaces de afiliados reales.
+- Los puntos son puntuación de juego sin valor monetario y no se pueden canjear.
+- El progreso queda guardado localmente y no se sincroniza entre dispositivos.
+- Antes de publicar comercialmente, añadir política de privacidad y contacto reales, probar en dispositivos y cumplir las políticas de tiendas y proveedores de anuncios.
