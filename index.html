@@ -1,559 +1,361 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#5b45e7">
-<meta name="description" content="GanaPlay: trivias y minijuegos rápidos para divertirte cada día.">
-<title>GanaPlay — Juega un rato</title>
-<link rel="manifest" href="manifest.webmanifest">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101827">
+<meta name="description" content="GanaPlay: juegos gratis para entretenerte.">
+<title>GanaPlay - Juega y diviértete</title>
 <style>
-:root {
-  --bg:#f6f7fb;
-  --card:#fff;
-  --ink:#1c2140;
-  --muted:#727894;
-  --brand:#5b45e7;
-  --line:#e8e9f2;
-  --good:#16845b;
-  --bad:#c33d54;
-}
-* { box-sizing:border-box }
-body {
-  margin:0;
-  background:var(--bg);
-  color:var(--ink);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-button { font:inherit; cursor:pointer }
-button:focus-visible {
-  outline:3px solid #ffbd4a;
-  outline-offset:3px;
-}
-header {
-  background:linear-gradient(130deg,#4e3ad8,#8c52ec);
-  color:#fff;
-  padding:24px 18px 28px;
-  border-radius:0 0 28px 28px;
-}
-.top {
-  max-width:760px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-.logo { font-weight:900; font-size:1.25rem }
-.pill {
-  background:#ffffff24;
-  border:1px solid #ffffff45;
-  padding:8px 12px;
-  border-radius:999px;
-  font-size:.9rem;
-}
-.hero { max-width:760px; margin:24px auto 0 }
-.hero h1 {
-  font-size:clamp(1.8rem,6vw,2.7rem);
-  line-height:1.04;
-  margin:0 0 10px;
-  letter-spacing:-1px;
-}
-.hero p { margin:0; color:#eee9ff; max-width:520px }
-main { max-width:760px; margin:0 auto; padding:20px 16px 42px }
-.section-head {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin:24px 2px 12px;
-}
-.section-head h2 { font-size:1.12rem; margin:0 }
-.small { font-size:.86rem; color:var(--muted) }
-.grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-.card {
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:17px;
-  box-shadow:0 6px 20px #29285b08;
-}
-.game-card {
-  min-height:168px;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  text-align:left;
-  transition:transform .15s,border-color .15s;
-}
-.game-card:hover { transform:translateY(-2px); border-color:#c8c0ff }
-.emoji { font-size:2rem; margin-bottom:12px }
-.game-card h3 { margin:0 0 6px; font-size:1rem }
-.game-card p {
-  font-size:.86rem;
-  color:var(--muted);
-  margin:0 0 14px;
-  line-height:1.4;
-}
-.tag { margin-top:auto; color:var(--brand); font-size:.82rem; font-weight:750 }
-.primary,.secondary,.answer {
-  border:0;
-  border-radius:14px;
-  padding:13px 15px;
-  font-weight:750;
-}
-.primary { background:var(--brand); color:white }
-.primary:hover { background:#4934d0 }
-.secondary { background:#efedff; color:var(--brand) }
-.answer {
-  width:100%;
-  text-align:left;
-  background:#f7f7fc;
-  border:1px solid var(--line);
-  color:var(--ink);
-  margin:6px 0;
-}
-.answer:hover { border-color:var(--brand); background:#f1efff }
-.answer.correct { border-color:var(--good); background:#eaf8f1 }
-.answer.wrong { border-color:var(--bad); background:#fff0f2 }
-.full { width:100% }
-.ad-slot {
-  border:1px dashed #c9cbe0;
-  background:#f0f1f8;
-  border-radius:16px;
-  padding:14px;
-  text-align:center;
-  color:#777c98;
-  font-size:.8rem;
-  margin-top:18px;
-}
-.ad-slot strong { display:block; color:#555b79; margin-bottom:3px }
-.panel { display:none }
-.panel.active { display:block }
-.back {
-  border:0;
-  background:transparent;
-  color:var(--brand);
-  font-weight:750;
-  padding:6px 0 16px;
-}
-.question { font-size:1.25rem; font-weight:800; line-height:1.35; margin:8px 0 16px }
-.progress { height:7px; background:#ececf5; border-radius:9px; overflow:hidden; margin:16px 0 }
-.progress>div { height:100%; width:0; background:var(--brand); transition:width .2s }
-.feedback { min-height:24px; font-weight:700; font-size:.92rem; margin:8px 0; color:var(--muted) }
-.result { text-align:center; padding:20px 6px }
-.result .big { font-size:3rem }
-.result h2 { margin:8px 0 }
-.result p { color:var(--muted); line-height:1.5 }
-.statrow { display:grid; grid-template-columns:repeat(3,1fr); gap:10px }
-.stat { text-align:center; padding:14px 8px }
-.stat b { display:block; font-size:1.3rem }
-.stat span { font-size:.78rem; color:var(--muted) }
-.link-card { display:flex; align-items:center; gap:12px }
-.link-card .emoji { margin:0 }
-.link-card p { margin:4px 0 0; font-size:.85rem; color:var(--muted) }
-.link-card .secondary { margin-left:auto; white-space:nowrap }
-footer {
-  text-align:center;
-  font-size:.85rem;
-  color:var(--muted);
-  padding:18px 12px 30px;
-  line-height:1.7;
-}
-footer a { color:var(--brand); text-decoration:underline }
-.toast {
-  position:fixed;
-  bottom:18px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#202342;
-  color:white;
-  border-radius:12px;
-  padding:12px 16px;
-  box-shadow:0 8px 28px #0002;
-  display:none;
-  max-width:90%;
-  z-index:5;
-}
-@media(min-width:600px) {
-  main { padding-top:26px }
-  .game-card { padding:20px }
-  .grid { gap:16px }
-}
-@media(max-width:360px) {
-  .grid { grid-template-columns:1fr }
-  .pill { font-size:.8rem }
-}
+*{box-sizing:border-box}
+body{margin:0;background:#101827;color:#f4f7fb;font-family:Arial,sans-serif;line-height:1.6}
+header{text-align:center;padding:25px 15px;background:#172338}
+header h1{margin:0;color:#70e1b0;font-size:2.2rem}
+header p, .muted{color:#b8c5d8}
+main{max-width:850px;margin:auto;padding:18px 14px}
+.panel{background:#1b2940;border:1px solid #354761;border-radius:15px;padding:18px;margin-bottom:18px}
+.points{color:#70e1b0;font-weight:bold;font-size:1.2rem}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.game-card{background:#243650;padding:15px;border-radius:12px}
+button,input{font:inherit;padding:11px;border-radius:8px}
+button{background:#70e1b0;color:#10251d;border:0;font-weight:bold;cursor:pointer;margin:4px 3px}
+input{max-width:260px;width:100%;background:#101827;color:white;border:1px solid #60718a}
+.hidden{display:none}
+.answer{display:block;width:100%;text-align:left;background:#314762;color:white}
+.result{min-height:28px;font-weight:bold}
+footer{text-align:center;border-top:1px solid #354761;padding:22px 12px;color:#b8c5d8}
+footer a{color:#70e1b0;display:inline-block;padding:6px}
+.ad-placeholder{text-align:center;border:1px dashed #60718a;padding:15px;margin:20px 0;border-radius:10px}
 </style>
 </head>
-
 <body>
 <header>
-  <div class="top">
-    <div class="logo">🎮 GanaPlay</div>
-    <div class="pill">⭐ <span id="pointsTop">0</span> puntos</div>
-  </div>
-  <div class="hero">
-    <h1>Un descanso.<br>Un reto. ¡A jugar!</h1>
-    <p>Trivias y minijuegos rápidos para poner a prueba tu mente.</p>
-  </div>
+<h1>🎮 GanaPlay</h1>
+<p>Juega, diviértete y acumula puntos recreativos.</p>
 </header>
-
 <main>
-<section id="home" class="panel active">
-  <div class="section-head">
-    <h2>Elige tu juego</h2>
-    <span class="small">Gratis para jugar</span>
-  </div>
-
-  <div class="grid">
-    <button class="card game-card" onclick="startQuiz()">
-      <span class="emoji">🧠</span>
-      <h3>Trivia relámpago</h3>
-      <p>5 preguntas de cultura general. ¿Cuántas aciertas?</p>
-      <span class="tag">Jugar ahora →</span>
-    </button>
-
-    <button class="card game-card" onclick="startMemory()">
-      <span class="emoji">🧩</span>
-      <h3>Encuentra el número</h3>
-      <p>Piensa rápido y encuentra el número secreto.</p>
-      <span class="tag">Jugar ahora →</span>
-    </button>
-
-    <button class="card game-card" onclick="startTap()">
-      <span class="emoji">⚡</span>
-      <h3>Reflejos</h3>
-      <p>Toca el botón tantas veces como puedas en 10 segundos.</p>
-      <span class="tag">Jugar ahora →</span>
-    </button>
-
-    <button class="card game-card" onclick="showStats()">
-      <span class="emoji">🏆</span>
-      <h3>Mi progreso</h3>
-      <p>Consulta tus puntos y partidas jugadas en este dispositivo.</p>
-      <span class="tag">Ver progreso →</span>
-    </button>
-  </div>
-
-  <div class="ad-slot">
-    <strong>Espacio publicitario de muestra</strong>
-    Los anuncios reales se conectarán cuando la aplicación cumpla los requisitos de una red publicitaria.
-  </div>
-
-  <div class="section-head">
-    <h2>Descubre algo nuevo</h2>
-    <span class="small">Recomendaciones</span>
-  </div>
-
-  <div class="card link-card">
-    <span class="emoji">🛍️</span>
-    <div>
-      <b>Productos recomendados</b>
-      <p>Se añadirán enlaces de afiliados válidos cuando nos registremos en un programa.</p>
-    </div>
-  </div>
+<section class="panel">
+<h2>¡Bienvenido a GanaPlay!</h2>
+<p>Juega trivia, adivina el número y pon a prueba tus reflejos.</p>
+<p class="points">Tus puntos: <span id="points">0</span></p>
+<p class="muted">Los puntos son recreativos, no representan dinero y no pueden canjearse.</p>
 </section>
-
-<section id="quiz" class="panel">
-  <button class="back" onclick="goHome()">← Inicio</button>
-  <div class="card">
-    <div class="small" id="quizCount">Pregunta 1 de 5</div>
-    <div class="progress"><div id="quizProgress"></div></div>
-    <div class="question" id="questionText"></div>
-    <div id="answers"></div>
-    <div class="feedback" id="quizFeedback" aria-live="polite"></div>
-    <button id="nextQuestion" class="primary full" style="display:none" onclick="nextQuestion()">Siguiente pregunta</button>
-  </div>
+<section class="panel">
+<h2>Elige tu juego</h2>
+<div class="games">
+<div class="game-card"><h3>🧠 Trivia</h3><p>Contesta preguntas.</p><button onclick="showGame('trivia')">Jugar trivia</button></div>
+<div class="game-card"><h3>🔢 Adivina el número</h3><p>Adivina del 1 al 10.</p><button onclick="showGame('number')">Jugar</button></div>
+<div class="game-card"><h3>⚡ Reflejos</h3><p>Reacciona a tiempo.</p><button onclick="showGame('reflex')">Jugar</button></div>
+</div>
 </section>
-
-<section id="memory" class="panel">
-  <button class="back" onclick="goHome()">← Inicio</button>
-  <div class="card">
-    <div class="small">Minijuego · Número secreto</div>
-    <div class="question">Estoy pensando en un número del 1 al 20.</div>
-    <p class="small">Tienes 5 intentos. Escribe tu respuesta.</p>
-    <form onsubmit="guessNumber(event)" style="display:flex;gap:8px">
-      <input id="guessInput" type="number" min="1" max="20" required placeholder="1–20" style="flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit">
-      <button class="primary">Probar</button>
-    </form>
-    <div class="feedback" id="guessFeedback" aria-live="polite"></div>
-    <button class="secondary" onclick="startMemory()">Reiniciar</button>
-  </div>
+<section id="trivia" class="panel hidden">
+<h2>🧠 Trivia</h2>
+<p id="quizProgress"></p>
+<h3 id="quizQuestion"></h3>
+<div id="quizAnswers"></div>
+<p id="quizResult" class="result" aria-live="polite"></p>
+<button id="quizNext" class="hidden" onclick="nextQuestion()">Siguiente</button>
+<button onclick="showGame('home')">Volver</button>
 </section>
-
-<section id="tap" class="panel">
-  <button class="back" onclick="goHome()">← Inicio</button>
-  <div class="card" style="text-align:center">
-    <div class="small">Minijuego · Reflejos</div>
-    <div class="question">¡Toca tan rápido como puedas!</div>
-    <div style="font-size:2rem;font-weight:900;margin:12px" id="tapCount">0</div>
-    <p class="small" id="tapStatus">Pulsa iniciar cuando estés listo.</p>
-    <button id="tapButton" class="primary full" onclick="tapAction()">Iniciar reto</button>
-  </div>
+<section id="number" class="panel hidden">
+<h2>🔢 Adivina el número</h2>
+<p>Pienso en un número del 1 al 10.</p>
+<input id="guessInput" type="number" min="1" max="10" placeholder="Tu número">
+<button onclick="checkGuess()">Comprobar</button>
+<button onclick="resetGuess()">Nuevo número</button>
+<p id="guessResult" class="result" aria-live="polite"></p>
+<button onclick="showGame('home')">Volver</button>
 </section>
-
-<section id="stats" class="panel">
-  <button class="back" onclick="goHome()">← Inicio</button>
-  <h2>Mi progreso</h2>
-  <div class="statrow">
-    <div class="card stat"><b id="statPoints">0</b><span>Puntos</span></div>
-    <div class="card stat"><b id="statGames">0</b><span>Partidas</span></div>
-    <div class="card stat"><b id="statBest">0</b><span>Mejor trivia</span></div>
-  </div>
-  <p class="small">Los datos se guardan solo en este dispositivo. Aún no hay cuentas ni premios canjeables.</p>
-  <button class="secondary" onclick="resetProgress()">Reiniciar progreso</button>
+<section id="reflex" class="panel hidden">
+<h2>⚡ Reflejos</h2>
+<p id="reflexInstructions">Pulsa comenzar y espera la señal.</p>
+<button id="reflexStart" onclick="startReflex()">Comenzar</button>
+<button id="reflexHit" class="hidden" onclick="hitReflex()">¡AHORA!</button>
+<p id="reflexResult" class="result" aria-live="polite"></p>
+<button onclick="showGame('home')">Volver</button>
 </section>
+<section class="panel">
+<h2>🏆 Tu progreso</h2>
+<p>Partidas: <span id="gamesPlayed">0</span></p>
+<p>Respuestas correctas: <span id="correctAnswers">0</span></p>
+<button onclick="resetProgress()">Reiniciar progreso</button>
+</section>
+<div class="ad-placeholder">Espacio reservado para publicidad. Los anuncios aún no están activados.</div>
 </main>
-
 <footer>
-  GanaPlay es una demo de entretenimiento. Los puntos no tienen valor monetario ni se pueden canjear por dinero. Juega de forma responsable.
-  <p>
-    <a href="acerca.html">Acerca de GanaPlay</a> ·
-    <a href="privacidad.html">Política de privacidad</a> ·
-    <a href="contacto.html">Contacto</a>
-  </p>
+<p>GanaPlay es una página de entretenimiento. Los puntos no tienen valor monetario.</p>
+<p>
+<a href="./acerca.html">Acerca de GanaPlay</a> ·
+<a href="./privacidad.html">Política de privacidad</a> ·
+<a href="./contacto.html">Contacto</a>
+</p>
 </footer>
-
-<div class="toast" id="toast" role="status"></div>
-
 <script>
-const $ = id => document.getElementById(id);
-const initial = {points:0,games:0,best:0};
-let data = {...initial};
+const STORAGE_KEY = 'ganaplay-progress';
+
+let progress = { points: 0, gamesPlayed: 0, correctAnswers: 0 };
 
 try {
-  data = {...initial,...JSON.parse(localStorage.getItem('ganaplay-progress') || '{}')};
-} catch(e) {}
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  if (saved) {
+    progress.points = Number(saved.points) || 0;
+    progress.gamesPlayed = Number(saved.gamesPlayed) || 0;
+    progress.correctAnswers = Number(saved.correctAnswers) || 0;
+  }
+} catch (e) {}
 
-function save() {
+function saveProgress() {
   try {
-    localStorage.setItem('ganaplay-progress',JSON.stringify(data));
-  } catch(e) {}
-  $('pointsTop').textContent = data.points;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  } catch (e) {}
+  updateStats();
+}
+
+function updateStats() {
+  document.getElementById('points').textContent = progress.points;
+  document.getElementById('gamesPlayed').textContent = progress.gamesPlayed;
+  document.getElementById('correctAnswers').textContent = progress.correctAnswers;
 }
 
 function addPoints(n) {
-  data.points += n;
-  save();
+  progress.points += n;
+  saveProgress();
 }
 
-function finishGame() {
-  data.games++;
-  save();
-}
-
-function toast(msg) {
-  const t = $('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  clearTimeout(window.toastTimer);
-  window.toastTimer = setTimeout(() => t.style.display = 'none',2600);
-}
-
-function hidePanels() {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-}
-
-function goHome() {
-  hidePanels();
-  $('home').classList.add('active');
-}
-
-function showStats() {
-  hidePanels();
-  $('stats').classList.add('active');
-  $('statPoints').textContent = data.points;
-  $('statGames').textContent = data.games;
-  $('statBest').textContent = data.best;
-}
-
-const questions = [
-  {q:'¿Cuál es el planeta más grande del sistema solar?',a:['Marte','Júpiter','Venus','Mercurio'],c:1},
-  {q:'¿Cuántos lados tiene un hexágono?',a:['5','6','7','8'],c:1},
-  {q:'¿Qué gas absorben principalmente las plantas?',a:['Oxígeno','Nitrógeno','Dióxido de carbono','Helio'],c:2},
-  {q:'¿Cuál es la capital de Japón?',a:['Seúl','Pekín','Bangkok','Tokio'],c:3},
-  {q:'¿Cuántos minutos tiene una hora?',a:['30','45','60','100'],c:2},
-  {q:'¿Qué océano es el más grande?',a:['Atlántico','Índico','Ártico','Pacífico'],c:3},
-  {q:'¿Qué instrumento mide la temperatura?',a:['Barómetro','Termómetro','Cronómetro','Anemómetro'],c:1},
-  {q:'¿Cuál de estos animales es un mamífero?',a:['Tiburón','Delfín','Trucha','Pulpo'],c:1}
-];
-
-let quizSet = [], qi = 0, score = 0, answered = false;
-
-function startQuiz() {
-  hidePanels();
-  $('quiz').classList.add('active');
-  quizSet = [...questions].sort(() => Math.random() - .5).slice(0,5);
-  qi = 0;
-  score = 0;
-  renderQuestion();
-}
-
-function renderQuestion() {
-  answered = false;
-  const q = quizSet[qi];
-  $('quizCount').textContent = `Pregunta ${qi+1} de ${quizSet.length}`;
-  $('quizProgress').style.width = (qi/quizSet.length*100)+'%';
-  $('questionText').textContent = q.q;
-  $('quizFeedback').textContent = '';
-  $('nextQuestion').style.display = 'none';
-  $('answers').innerHTML = '';
-
-  q.a.forEach((a,i) => {
-    const b = document.createElement('button');
-    b.className = 'answer';
-    b.textContent = a;
-    b.onclick = () => answerQuestion(i,b);
-    $('answers').appendChild(b);
-  });
-}
-
-function answerQuestion(i,btn) {
-  if (answered) return;
-  answered = true;
-  const q = quizSet[qi];
-
-  [...$('answers').children].forEach((b,j) => {
-    b.disabled = true;
-    if (j === q.c) b.classList.add('correct');
+function showGame(game) {
+  ['trivia', 'number', 'reflex'].forEach(id => {
+    document.getElementById(id).classList.add('hidden');
   });
 
-  if (i === q.c) {
-    score++;
-    addPoints(10);
-    $('quizFeedback').textContent = '¡Correcto! +10 puntos';
-    $('quizFeedback').style.color = 'var(--good)';
-  } else {
-    $('quizFeedback').textContent = 'No pasa nada, ¡vamos a la siguiente!';
-    $('quizFeedback').style.color = 'var(--bad)';
-    btn.classList.add('wrong');
+  if (game !== 'home') {
+    document.getElementById(game).classList.remove('hidden');
   }
 
-  $('quizProgress').style.width = ((qi+1)/quizSet.length*100)+'%';
-  $('nextQuestion').textContent = qi === quizSet.length-1 ? 'Ver resultado' : 'Siguiente pregunta';
-  $('nextQuestion').style.display = 'block';
+  if (game === 'trivia') startTrivia();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* JUEGO DE TRIVIA */
+const questions = [
+  {
+    question: '¿Cuál es el planeta rojo?',
+    answers: ['Venus', 'Marte', 'Júpiter', 'Mercurio'],
+    correct: 1
+  },
+  {
+    question: '¿Cuántos lados tiene un triángulo?',
+    answers: ['Dos', 'Tres', 'Cuatro', 'Cinco'],
+    correct: 1
+  },
+  {
+    question: '¿Cuánto es 5 por 6?',
+    answers: ['11', '25', '30', '35'],
+    correct: 2
+  },
+  {
+    question: '¿Qué gas necesitamos para respirar?',
+    answers: ['Oxígeno', 'Helio', 'Hidrógeno', 'Metano'],
+    correct: 0
+  },
+  {
+    question: '¿Cuál es el océano más grande?',
+    answers: ['Atlántico', 'Índico', 'Ártico', 'Pacífico'],
+    correct: 3
+  }
+];
+
+let order = [];
+let questionIndex = 0;
+let answered = false;
+let quizFinished = false;
+
+function startTrivia() {
+  order = questions.map((_, i) => i);
+  order.sort(() => Math.random() - 0.5);
+  questionIndex = 0;
+  quizFinished = false;
+  showQuestion();
+}
+
+function showQuestion() {
+  answered = false;
+  const q = questions[order[questionIndex]];
+
+  document.getElementById('quizProgress').textContent =
+    'Pregunta ' + (questionIndex + 1) + ' de ' + questions.length;
+
+  document.getElementById('quizQuestion').textContent = q.question;
+  document.getElementById('quizResult').textContent = '';
+  document.getElementById('quizNext').classList.add('hidden');
+
+  const container = document.getElementById('quizAnswers');
+  container.innerHTML = '';
+
+  q.answers.forEach((answer, i) => {
+    const button = document.createElement('button');
+    button.className = 'answer';
+    button.textContent = answer;
+    button.onclick = () => answerQuestion(i);
+    container.appendChild(button);
+  });
+}
+
+function answerQuestion(i) {
+  if (answered || quizFinished) return;
+  answered = true;
+
+  const q = questions[order[questionIndex]];
+  document.querySelectorAll('#quizAnswers button').forEach(b => b.disabled = true);
+
+  progress.gamesPlayed++;
+
+  if (i === q.correct) {
+    document.getElementById('quizResult').textContent =
+      '¡Correcto! Ganaste 10 puntos.';
+    progress.correctAnswers++;
+    progress.points += 10;
+  } else {
+    document.getElementById('quizResult').textContent =
+      'Incorrecto. La respuesta correcta es: ' + q.answers[q.correct] + '.';
+  }
+
+  saveProgress();
+
+  const next = document.getElementById('quizNext');
+
+  if (questionIndex === questions.length - 1) {
+    quizFinished = true;
+    next.textContent = 'Volver a jugar';
+  } else {
+    next.textContent = 'Siguiente pregunta';
+  }
+
+  next.classList.remove('hidden');
 }
 
 function nextQuestion() {
-  if (qi < quizSet.length-1) {
-    qi++;
-    renderQuestion();
-  } else {
-    finishGame();
-    data.best = Math.max(data.best,score);
-    save();
-    $('quiz').innerHTML = `
-      <button class="back" onclick="goHome()">← Inicio</button>
-      <div class="card result">
-        <div class="big">🎉</div>
-        <h2>¡Terminaste!</h2>
-        <p>Acertaste <b>${score} de ${quizSet.length}</b> preguntas.</p>
-        <p>Ganaste <b>${score*10} puntos</b>.</p>
-        <button class="primary full" onclick="startQuiz()">Jugar otra vez</button>
-      </div>`;
-  }
-}
-
-let secret = 0, attempts = 0;
-
-function startMemory() {
-  hidePanels();
-  $('memory').classList.add('active');
-  secret = Math.floor(Math.random()*20)+1;
-  attempts = 0;
-  $('guessInput').value = '';
-  $('guessFeedback').textContent = '';
-  $('guessInput').disabled = false;
-  document.querySelector('#memory form button').disabled = false;
-}
-
-function guessNumber(e) {
-  e.preventDefault();
-  const v = Number($('guessInput').value);
-  attempts++;
-
-  if (v === secret) {
-    $('guessFeedback').textContent = '¡Lo encontraste! +20 puntos';
-    $('guessFeedback').style.color = 'var(--good)';
-    addPoints(20);
-    finishGame();
-    $('guessInput').disabled = true;
-    document.querySelector('#memory form button').disabled = true;
-  } else if (attempts >= 5) {
-    $('guessFeedback').textContent = `Se acabaron los intentos. Era ${secret}.`;
-    $('guessFeedback').style.color = 'var(--bad)';
-    finishGame();
-    $('guessInput').disabled = true;
-    document.querySelector('#memory form button').disabled = true;
-  } else {
-    $('guessFeedback').textContent = (v < secret ? 'Prueba con un número más alto.' : 'Prueba con un número más bajo.') + ` Te quedan ${5-attempts} intentos.`;
-    $('guessFeedback').style.color = 'var(--muted)';
+  if (quizFinished) {
+    startTrivia();
+    return;
   }
 
-  $('guessInput').value = '';
+  questionIndex++;
+  showQuestion();
 }
 
-let tapState = 'idle', tapN = 0, tapEnd = 0, tapInterval = null;
+/* JUEGO DE NÚMEROS */
+let secretNumber = newNumber();
+let guessFinished = false;
 
-function startTap() {
-  hidePanels();
-  $('tap').classList.add('active');
-  tapState = 'idle';
-  tapN = 0;
-  $('tapCount').textContent = '0';
-  $('tapStatus').textContent = 'Pulsa iniciar cuando estés listo.';
-  $('tapButton').textContent = 'Iniciar reto';
+function newNumber() {
+  return Math.floor(Math.random() * 10) + 1;
 }
 
-function tapAction() {
-  if (tapState === 'idle') {
-    tapState = 'playing';
-    tapN = 0;
-    tapEnd = Date.now()+10000;
-    $('tapButton').textContent = '¡TOCA!';
-    $('tapStatus').textContent = 'Tienes 10 segundos';
-
-    tapInterval = setInterval(() => {
-      const left = Math.max(0,Math.ceil((tapEnd-Date.now())/1000));
-      $('tapStatus').textContent = `Tiempo restante: ${left}s`;
-
-      if (Date.now() >= tapEnd) {
-        clearInterval(tapInterval);
-        tapState = 'done';
-        $('tapButton').textContent = 'Intentar de nuevo';
-        $('tapStatus').textContent = `¡Hiciste ${tapN} toques!`;
-        addPoints(tapN);
-        finishGame();
-      }
-    },100);
-  } else if (tapState === 'playing') {
-    tapN++;
-    $('tapCount').textContent = tapN;
-  } else {
-    tapState = 'idle';
-    tapAction();
+function checkGuess() {
+  if (guessFinished) {
+    document.getElementById('guessResult').textContent =
+      'Pulsa Nuevo número para volver a jugar.';
+    return;
   }
+
+  const input = document.getElementById('guessInput');
+  const guess = Number(input.value);
+  const result = document.getElementById('guessResult');
+
+  if (!input.value || !Number.isInteger(guess) || guess < 1 || guess > 10) {
+    result.textContent = 'Escribe un número entero del 1 al 10.';
+    return;
+  }
+
+  progress.gamesPlayed++;
+
+  if (guess === secretNumber) {
+    result.textContent = '¡Correcto! Ganaste 15 puntos.';
+    progress.correctAnswers++;
+    progress.points += 15;
+    guessFinished = true;
+  } else {
+    result.textContent = guess < secretNumber
+      ? 'El número secreto es mayor. Intenta otra vez.'
+      : 'El número secreto es menor. Intenta otra vez.';
+  }
+
+  saveProgress();
+}
+
+function resetGuess() {
+  secretNumber = newNumber();
+  guessFinished = false;
+  document.getElementById('guessInput').value = '';
+  document.getElementById('guessResult').textContent = '';
+}
+
+/* JUEGO DE REFLEJOS */
+let reflexTimer = null;
+let reflexStartTime = 0;
+let reflexState = 'idle';
+
+function startReflex() {
+  clearTimeout(reflexTimer);
+  reflexState = 'waiting';
+
+  document.getElementById('reflexStart').classList.add('hidden');
+  document.getElementById('reflexHit').classList.add('hidden');
+  document.getElementById('reflexResult').textContent = '';
+  document.getElementById('reflexInstructions').textContent =
+    'Espera la señal verde...';
+
+  reflexTimer = setTimeout(() => {
+    reflexState = 'ready';
+    reflexStartTime = performance.now();
+    document.getElementById('reflexInstructions').textContent = '¡Pulsa ahora!';
+    document.getElementById('reflexHit').classList.remove('hidden');
+  }, 1500 + Math.random() * 3000);
+}
+
+function hitReflex() {
+  const result = document.getElementById('reflexResult');
+
+  if (reflexState === 'waiting') {
+    clearTimeout(reflexTimer);
+    reflexState = 'idle';
+    result.textContent = '¡Demasiado pronto! Intenta otra vez.';
+    document.getElementById('reflexHit').classList.add('hidden');
+    document.getElementById('reflexStart').classList.remove('hidden');
+    return;
+  }
+
+  if (reflexState !== 'ready') return;
+
+  const elapsed = Math.round(performance.now() - reflexStartTime);
+  reflexState = 'done';
+  progress.gamesPlayed++;
+
+  if (elapsed < 350) {
+    result.textContent = '¡Excelente! ' + elapsed + ' ms. Ganaste 10 puntos.';
+    progress.correctAnswers++;
+    progress.points += 10;
+  } else {
+    result.textContent = 'Tu tiempo fue de ' + elapsed + ' ms. ¡Intenta mejorar!';
+  }
+
+  saveProgress();
+
+  document.getElementById('reflexInstructions').textContent =
+    '¿Quieres volver a probar tus reflejos?';
+  document.getElementById('reflexHit').classList.add('hidden');
+  document.getElementById('reflexStart').classList.remove('hidden');
 }
 
 function resetProgress() {
-  if (confirm('¿Seguro que quieres borrar tu progreso guardado en este dispositivo?')) {
-    data = {...initial};
-    save();
-    showStats();
-    toast('Progreso reiniciado.');
-  }
+  if (!confirm('¿Quieres borrar tus puntos y estadísticas?')) return;
+
+  progress = { points: 0, gamesPlayed: 0, correctAnswers: 0 };
+  saveProgress();
 }
 
-save();
-
-if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
-}
+updateStats();
 </script>
 </body>
 </html>
